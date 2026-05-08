@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyLearn 365 — Learn Python with Bro Code</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@300;400;500;600&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --cream: #fdf8f1;
+            --cream2: #f5ead8;
+            --cream3: #ede0c8;
+            --parchment: #e8d5b4;
+            --brown-pale: #d4b896;
+            --brown-light: #c49a6c;
+            --brown: #a87340;
+            --brown-dark: #7a5228;
+            --brown-deep: #4e3118;
+            --text: #2a1a08;
+            --text2: #5c3a18;
+            --text3: #8c6840;
+            --text4: #b8956a;
+            --border: #e0cca8;
+            --border2: #c8b088;
+            --white: #fffef9;
+            --success: #3d7a4a;
+            --success-bg: #e8f5ec;
+            --danger: #b03030;
+            --danger-bg: #faeaea;
+            --info: #2060a0;
+            --yt-red: #cc0000;
+        }
+
+        body {
+            background: var(--cream);
+            color: var(--text);
+            font-family: 'Lora', serif;
+            font-size: 14px;
+            min-height: 100vh
+        }
+
+        /* paper texture overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5
+        }
+
+        .wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 18px 14px 60px
+        }
+
+        /* ── TOP BAR ── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 22px;
+            margin-bottom: 18px;
+            box-shadow: 0 3px 16px rgba(122, 82, 40, 0.09)
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--text);
+            letter-spacing: -0.5px
+        }
+
+        .logo em {
+            color: var(--brown);
+            font-style: normal
+        }
+
+        .logo sub {
+            font-size: 11px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 400;
+            color: var(--text3);
+            display: block;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-top: -3px
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 15px;
+            border-radius: 20px;
+            background: var(--cream2);
+            border: 1.5px solid var(--border);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px
+        }
+
+        .pill-val {
+            font-weight: 700;
+            color: var(--brown-dark);
+            font-size: 15px
+        }
+
+        .pill-lbl {
+            color: var(--text3)
+        }
+
+        .pill-fire {
+            font-size: 16px
+        }
+
+        /* ── PROGRESS STEPS ── */
+        .steps-bar {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 18px;
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 0;
+            overflow: hidden
+        }
+
+        .step {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-right: 1px solid var(--border);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text3);
+            user-select: none
+        }
+
+        .step:last-child {
+            border-right: none
+        }
+
+        .step:hover {
+            background: var(--cream2)
+        }
+
+        .step.active {
+            background: var(--brown);
+            color: var(--white)
+        }
+
+        .step.done {
+            background: var(--cream2);
+            color: var(--success)
+        }
+
+        .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1.5px solid currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0
+        }
+
+        .step.active .step-num {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6)
+        }
+
+        .step.done .step-num {
+            background: var(--success);
+            border-color: var(--success);
+            color: white
+        }
+
+        /* ── SCREENS ── */
+        .screen {
+            display: none
+        }
+
+        .screen.active {
+            display: block
+        }
+
+        /* ── LESSON CARD (VIDEO SCREEN) ── */
+        .lesson-card {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(122, 82, 40, 0.08)
+        }
+
+        .lesson-header {
+            background: var(--cream2);
+            border-bottom: 1.5px solid var(--border);
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .lesson-num {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 0.1em
+        }
+
+        .lesson-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 4px 0 6px
+        }
+
+        .lesson-desc {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.6
+        }
+
+        .lesson-body {
+            padding: 22px
+        }
+
+        .video-frame {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #1a0a00;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            border: 2px solid var(--parchment)
+        }
+
+        .video-frame iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px
+        }
+
+        .video-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a0800, #2d1200);
+            cursor: pointer;
+            gap: 14px
+        }
+
+        .yt-btn {
+            width: 70px;
+            height: 50px;
+            background: var(--yt-red);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s
+        }
+
+        .yt-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 24px rgba(204, 0, 0, 0.4)
+        }
+
+        .yt-triangle {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 12px 0 12px 22px;
+            border-color: transparent transparent transparent white;
+            margin-left: 4px
+        }
+
+        .video-label {
+            color: rgba(255, 255, 255, 0.85);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            text-align: center;
+            letter-spacing: 0.05em
+        }
+
+        .video-sublabel {
+            color: rgba(255, 255, 255, 0.45);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em
+        }
+
+        /* Topics covered */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 18px
+        }
+
+        .topic-chip {
+            background: var(--cream2);
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            padding: 9px 13px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: var(--text2);
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .topic-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--brown-light);
+            flex-shrink: 0
+        }
+
+        .lesson-note {
+            background: var(--cream2);
+            border-left: 3px solid var(--brown);
+            border-radius: 0 10px 10px 0;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.65;
+            margin-bottom: 18px
+        }
+
+        .lesson-note strong {
+            color: var(--brown-dark)
+        }
+
+        .btn-watched {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 13px 32px;
+            border-radius: 11px;
+            background: var(--brown-deep);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.04em;
+            display: block;
+            width: 100%;
+            text-align: center
+        }
+
+        .btn-watched:hover {
+            background: var(--brown-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(78, 49, 24, 0.3)
+        }
+
+        /* ── CHALLENGE SCREEN ── */
+        .ch-header {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 22px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(122, 82, 40, 0.06)
+        }
+
+        .ch-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .ch-prog-bar {
+            width: 160px;
+            height: 7px;
+            background: var(--cream3);
+            border-radius: 4px;
+            overflow: hidden
+        }
+
+        .ch-prog-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brown-light), var(--brown));
+            border-radius: 4px;
+            transition: width 0.5s ease
+        }
+
+        .ch-prog-txt {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: var(--text3)
+        }
+
+        .ch-title-area {
+            font-family: 'Playfair Display', serif;
+            font-size: 13px;
+            color: var(--text3)
+        }
+
+        /* main grid */
+        .ch-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 14px;
+            margin-bottom: 14px
+        }
+
+        /* problem panel */
+        .problem-panel {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column
+        }
+
+        .pp-head {
+            background: var(--cream2);
+            border-bottom: 1.5px solid var(--border);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .pp-head-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text3)
+        }
+
+        .pp-body {
+            padding: 18px;
+            overflow-y: auto;
+            max-height: 480px;
+            flex: 1
+        }
+
+        .badges {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 11px
+        }
+
+        .badge {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em
+        }
+
+        .b-easy {
+            background: #e6f4ea;
+            color: #256029;
+            border: 1px solid #a8d5ae
+        }
+
+        .b-medium {
+            background: #fff3e0;
+            color: #b35900;
+            border: 1px solid #ffb74d
+        }
+
+        .b-hard {
+            background: #fce4ec;
+            color: #a02020;
+            border: 1px solid #f48fb1
+        }
+
+        .b-tag {
+            background: var(--cream2);
+            color: var(--brown-dark);
+            border: 1px solid var(--parchment)
+        }
+
+        .prob-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 10px;
+            line-height: 1.3
+        }
+
+        .prob-desc {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.75;
+            margin-bottom: 14px
+        }
+
+        .prob-example {
+            background: var(--cream2);
+            border-radius: 9px;
+            padding: 12px 14px;
+            border-left: 3px solid var(--brown);
+            margin-bottom: 12px
+        }
+
+        .ex-lbl {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 6px
+        }
+
+        .ex-code {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            color: var(--brown-deep);
+            line-height: 1.65;
+            white-space: pre-wrap
+        }
+
+        .hint-box {
+            background: #fffbf3;
+            border: 1.5px dashed var(--parchment);
+            border-radius: 9px;
+            padding: 11px 14px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text3);
+            line-height: 1.65;
+            display: none
+        }
+
+        .hint-box.show {
+            display: block
+        }
+
+        /* editor */
+        .editor-panel {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column
+        }
+
+        .ed-toolbar {
+            background: var(--cream2);
+            border-bottom: 1.5px solid var(--border);
+            padding: 9px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .ed-file {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: var(--text3);
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 6px;
+            padding: 3px 10px
+        }
+
+        .ed-spacer {
+            flex: 1
+        }
+
+        .ed-lang {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            background: var(--brown-deep);
+            color: var(--white);
+            padding: 3px 8px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em
+        }
+
+        .code-wrap {
+            display: flex;
+            flex: 1;
+            background: var(--cream);
+            min-height: 240px
+        }
+
+        .line-nums {
+            padding: 14px 8px 14px 12px;
+            background: var(--cream2);
+            border-right: 1px solid var(--border);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            color: var(--text4);
+            line-height: 1.7;
+            user-select: none;
+            min-width: 38px;
+            text-align: right
+        }
+
+        .code-ta {
+            flex: 1;
+            padding: 14px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            resize: none;
+            outline: none;
+            width: 100%;
+            min-height: 240px;
+            tab-size: 2
+        }
+
+        .ed-footer {
+            padding: 10px 14px;
+            background: var(--cream2);
+            border-top: 1.5px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .btn {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1.5px solid;
+            letter-spacing: 0.03em;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .btn-run {
+            background: var(--brown-deep);
+            color: var(--white);
+            border-color: var(--brown-deep)
+        }
+
+        .btn-run:hover {
+            background: var(--brown-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(78, 49, 24, 0.25)
+        }
+
+        .btn-submit {
+            background: var(--success);
+            color: var(--white);
+            border-color: var(--success)
+        }
+
+        .btn-submit:hover {
+            opacity: 0.85;
+            transform: translateY(-1px)
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--brown-dark);
+            border-color: var(--brown-light)
+        }
+
+        .btn-ghost:hover {
+            background: var(--cream2)
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 11px
+        }
+
+        /* output */
+        .output-panel {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            grid-column: 1/-1
+        }
+
+        .out-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px
+        }
+
+        .out-lbl {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text3)
+        }
+
+        .out-status {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px
+        }
+
+        .s-idle {
+            background: var(--cream2);
+            color: var(--text3)
+        }
+
+        .s-pass {
+            background: var(--success-bg);
+            color: var(--success)
+        }
+
+        .s-fail {
+            background: var(--danger-bg);
+            color: var(--danger)
+        }
+
+        .s-run {
+            background: #e8f0fa;
+            color: var(--info)
+        }
+
+        .out-body {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            line-height: 1.8;
+            min-height: 50px
+        }
+
+        .o-pass {
+            color: var(--success)
+        }
+
+        .o-fail {
+            color: var(--danger)
+        }
+
+        .o-info {
+            color: var(--text3)
+        }
+
+        .o-ai {
+            color: var(--brown-dark);
+            background: var(--cream2);
+            padding: 9px 13px;
+            border-radius: 8px;
+            border-left: 3px solid var(--brown-light);
+            display: block;
+            margin-top: 8px;
+            line-height: 1.7
+        }
+
+        .o-run {
+            color: var(--info)
+        }
+
+        /* loading dots */
+        .ld {
+            display: inline-flex;
+            gap: 4px;
+            align-items: center;
+            vertical-align: middle
+        }
+
+        .ld span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--brown);
+            animation: lda 1.2s ease-in-out infinite
+        }
+
+        .ld span:nth-child(2) {
+            animation-delay: .2s
+        }
+
+        .ld span:nth-child(3) {
+            animation-delay: .4s
+        }
+
+        @keyframes lda {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.5);
+                opacity: .4
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        /* challenge nav */
+        .ch-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 13px 18px
+        }
+
+        .ch-nav-info {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.5
+        }
+
+        .ch-nav-info strong {
+            color: var(--text);
+            font-family: 'Playfair Display', serif
+        }
+
+        /* success screen */
+        .success-screen {
+            background: var(--white);
+            border: 2px solid var(--brown-light);
+            border-radius: 16px;
+            padding: 36px;
+            text-align: center;
+            margin-bottom: 16px;
+            box-shadow: 0 6px 30px rgba(122, 82, 40, 0.12)
+        }
+
+        .success-icon {
+            font-size: 56px;
+            margin-bottom: 14px;
+            display: block;
+            animation: pop .5s cubic-bezier(.3, 1.5, .5, 1) forwards
+        }
+
+        .success-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--brown-deep);
+            margin-bottom: 8px
+        }
+
+        .success-sub {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.6;
+            margin-bottom: 22px
+        }
+
+        /* heatmap */
+        .heatmap-section {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px
+        }
+
+        .hm-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px
+        }
+
+        .hm-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text2)
+        }
+
+        .hm-pct {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--brown)
+        }
+
+        .hm-bar {
+            height: 7px;
+            background: var(--cream3);
+            border-radius: 4px;
+            margin-bottom: 14px;
+            overflow: hidden
+        }
+
+        .hm-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brown-light), var(--brown));
+            border-radius: 4px;
+            transition: width 1s ease
+        }
+
+        .heatmap {
+            display: grid;
+            grid-template-columns: repeat(52, 1fr);
+            gap: 3px
+        }
+
+        .hm-week {
+            display: flex;
+            flex-direction: column;
+            gap: 3px
+        }
+
+        .hm-cell {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 2px;
+            background: var(--cream3);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform .15s, background .2s
+        }
+
+        .hm-cell:hover {
+            transform: scale(1.4)
+        }
+
+        .hm-cell.done {
+            background: var(--brown);
+            border-color: var(--brown-dark)
+        }
+
+        .hm-cell.today {
+            background: var(--brown-deep);
+            border-color: var(--brown-deep);
+            box-shadow: 0 0 0 2px rgba(78, 49, 24, .3)
+        }
+
+        .hm-cell.today.done {
+            background: var(--success);
+            border-color: var(--success)
+        }
+
+        /* lesson list sidebar for overview */
+        .lesson-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 18px
+        }
+
+        .lesson-item {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all .2s
+        }
+
+        .lesson-item:hover {
+            border-color: var(--brown-light);
+            box-shadow: 0 4px 14px rgba(122, 82, 40, .1)
+        }
+
+        .lesson-item.active-lesson {
+            border-color: var(--brown);
+            background: var(--cream2)
+        }
+
+        .lesson-item.completed {
+            border-color: var(--success)
+        }
+
+        .li-num {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 5px
+        }
+
+        .li-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+            line-height: 1.3
+        }
+
+        .li-status {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            color: var(--text3)
+        }
+
+        .li-status.done {
+            color: var(--success)
+        }
+
+        /* toast */
+        .toast {
+            position: fixed;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%) translateY(70px);
+            background: var(--brown-deep);
+            color: var(--white);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            z-index: 999;
+            opacity: 0;
+            transition: all .35s cubic-bezier(.4, 0, .2, 1);
+            white-space: nowrap;
+            pointer-events: none
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(.6);
+                opacity: 0
+            }
+
+            60% {
+                transform: scale(1.15)
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .screen.active {
+            animation: fadeIn .3s ease forwards
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <!-- TOP BAR -->
+        <div class="topbar">
+            <div class="logo">Py<em>Learn</em><sub>365 — Python with Bro Code</sub></div>
+            <div class="topbar-right">
+                <div class="pill"><span class="pill-val" id="statSolved">0</span><span class="pill-lbl">solved</span></div>
+                <div class="pill"><span class="pill-fire">🔥</span><span class="pill-val" id="statStreak">0</span><span class="pill-lbl">streak</span></div>
+                <div class="pill"><span class="pill-val" id="statLesson">—</span><span class="pill-lbl">lesson</span></div>
+            </div>
+        </div>
+
+        <!-- STEP INDICATOR -->
+        <div class="steps-bar" id="stepsBar">
+            <div class="step active" id="stepWatch" onclick="goScreen('watch')">
+                <div class="step-num">1</div><span>Watch</span>
+            </div>
+            <div class="step" id="stepChallenge" onclick="goScreen('challenge')">
+                <div class="step-num">2</div><span>Challenges</span>
+            </div>
+            <div class="step" id="stepProgress" onclick="goScreen('progress')">
+                <div class="step-num">3</div><span>Progress</span>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════
+     SCREEN 1: WATCH VIDEO
+════════════════════════════════════════ -->
+        <div class="screen active" id="screenWatch">
+
+            <!-- Lesson list -->
+            <div class="lesson-list" id="lessonList"></div>
+
+            <!-- Current lesson card -->
+            <div class="lesson-card" id="lessonCard">
+                <div class="lesson-header">
+                    <div>
+                        <div class="lesson-num" id="lessonNum">Lesson 1 of 12</div>
+                        <div class="lesson-title" id="lessonTitle">Loading...</div>
+                        <div class="lesson-desc" id="lessonDesc"></div>
+                    </div>
+                </div>
+                <div class="lesson-body">
+
+                    <!-- YouTube embed -->
+                    <div class="video-frame" id="videoFrame">
+                        <div class="video-placeholder" id="videoPlaceholder" onclick="loadVideo()">
+                            <div class="yt-btn">
+                                <div class="yt-triangle"></div>
+                            </div>
+                            <div class="video-label" id="videoLabel">Click to watch on YouTube</div>
+                            <div class="video-sublabel">Bro Code · YouTube</div>
+                        </div>
+                    </div>
+
+                    <!-- Topics -->
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:10px">What you'll learn</div>
+                    <div class="topics-grid" id="topicsGrid"></div>
+
+                    <!-- Note -->
+                    <div class="lesson-note" id="lessonNote"></div>
+
+                    <button class="btn-watched" onclick="markWatched()">✓ I've Watched This — Show Me the Challenges</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ════════════════════════════════════════
+     SCREEN 2: CHALLENGES
+════════════════════════════════════════ -->
+        <div class="screen" id="screenChallenge">
+
+            <!-- header -->
+            <div class="ch-header">
+                <div class="ch-progress">
+                    <div class="ch-prog-bar">
+                        <div class="ch-prog-fill" id="chProgFill" style="width:0%"></div>
+                    </div>
+                    <span class="ch-prog-txt" id="chProgTxt">0 / 0</span>
+                </div>
+                <div class="ch-title-area" id="chLessonLabel"></div>
+                <button class="btn btn-ghost btn-sm" onclick="goScreen('watch')">← Back to Lessons</button>
+            </div>
+
+            <!-- challenge grid -->
+            <div class="ch-grid" id="chGrid">
+
+                <!-- problem -->
+                <div class="problem-panel">
+                    <div class="pp-head">
+                        <span class="pp-head-title">Problem</span>
+                        <span id="chNumLabel" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3)"></span>
+                    </div>
+                    <div class="pp-body">
+                        <div class="badges" id="chBadges"></div>
+                        <div class="prob-title" id="chTitle">Loading...</div>
+                        <div class="prob-desc" id="chDesc"></div>
+                        <div class="prob-example" id="chExBox">
+                            <div class="ex-lbl">Example</div>
+                            <div class="ex-code" id="chExCode"></div>
+                        </div>
+                        <div class="hint-box" id="hintBox"></div>
+                        <div style="margin-top:12px">
+                            <button class="btn btn-ghost btn-sm" onclick="toggleHint()">💡 Show Hint</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- editor -->
+                <div class="editor-panel">
+                    <div class="ed-toolbar">
+                        <span class="ed-file" id="edFile">solution.py</span>
+                        <span class="ed-spacer"></span>
+                        <span class="ed-lang">Python</span>
+                    </div>
+                    <div class="code-wrap">
+                        <div class="line-nums" id="lineNums">1</div>
+                        <textarea class="code-ta" id="codeArea" spellcheck="false" oninput="updateLines()" onkeydown="handleTab(event)" placeholder="# Write your Python solution here..."></textarea>
+                    </div>
+                    <div class="ed-footer">
+                        <button class="btn btn-run" onclick="runCode()">▶ Run</button>
+                        <button class="btn btn-submit" onclick="submitCode()">✓ Submit</button>
+                        <button class="btn btn-ghost" onclick="getHint()">🤖 AI Help</button>
+                        <button class="btn btn-ghost" onclick="resetCode()" style="margin-left:auto">↺ Reset</button>
+                    </div>
+                </div>
+
+                <!-- output -->
+                <div class="output-panel">
+                    <div class="out-head">
+                        <span class="out-lbl">Output &amp; Results</span>
+                        <span class="out-status s-idle" id="outStatus">Ready</span>
+                    </div>
+                    <div class="out-body" id="outBody">
+                        <span class="o-info">Write your solution and click ▶ Run to test it.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- nav -->
+            <div class="ch-nav">
+                <div class="ch-nav-info">
+                    <strong id="chNavTitle">Challenge</strong><br>
+                    <span id="chNavSub" style="font-size:12px;color:var(--text3)">Complete all challenges to unlock the next lesson.</span>
+                </div>
+                <div style="display:flex;gap:8px">
+                    <button class="btn btn-ghost" onclick="prevChallenge()">← Prev</button>
+                    <button class="btn btn-ghost" onclick="nextChallenge()">Next →</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ════════════════════════════════════════
+     SCREEN 3: PROGRESS
+════════════════════════════════════════ -->
+        <div class="screen" id="screenProgress">
+            <div class="heatmap-section">
+                <div class="hm-top">
+                    <div class="hm-title">365-Day Journey</div>
+                    <div class="hm-pct" id="hmPct">0 / 365</div>
+                </div>
+                <div class="hm-bar">
+                    <div class="hm-fill" id="hmFill" style="width:0%"></div>
+                </div>
+                <div class="heatmap" id="heatmap"></div>
+            </div>
+            <div class="lesson-list" id="progressLessons"></div>
+        </div>
+
+    </div><!-- /wrap -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // DATA: Lessons + Challenges
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        const LESSONS = [{
+                id: 1,
+                title: 'Python Installation & Print',
+                desc: 'Set up Python, run your first program, and master the print() function.',
+                videoId: 'eWRfhZUzrAc',
+                videoTitle: 'Python Full Course for Beginners',
+                topics: ['Installing Python', 'VS Code setup', 'print() function', 'f-strings', 'Escape characters', 'Comments'],
+                note: '<strong>Watch the first 30 minutes</strong> of this Bro Code Python tutorial — it covers installation, running Python, and the print() function. Pause and follow along!',
+                challenges: [{
+                        id: 101,
+                        diff: 'easy',
+                        tag: 'Print',
+                        title: 'Hello, World!',
+                        desc: 'Write a Python program that prints exactly:\nHello, World!\n\nThen on the next line print your name using an f-string.',
+                        example: 'Expected output:\nHello, World!\nHello, my name is [YourName]',
+                        hint: "Use print() twice. For the f-string: name = 'Alice'  then  print(f'Hello, my name is {name}')",
+                        starter: "# Your first Python program!\n# Step 1: print Hello World\nprint('Hello, World!')\n\n# Step 2: print your name using f-string\nname = 'YourName'  # change this!\nprint(f'Hello, my name is {name}')"
+                    },
+                    {
+                        id: 102,
+                        diff: 'easy',
+                        tag: 'Print',
+                        title: 'Escape Characters',
+                        desc: "Print the following EXACTLY (including quotes and backslash):\nShe said \"Python is awesome!\"\nPath: C:\\Users\\Python",
+                        example: 'Line 1: She said "Python is awesome!"\nLine 2: Path: C:\\Users\\Python',
+                        hint: 'Use \\\" for double quotes inside a string, and \\\\ for a backslash.',
+                        starter: '# Print text with special characters\n# Hint: use \\" for quotes and \\\\ for backslash\nprint()\nprint()'
+                    },
+                    {
+                        id: 103,
+                        diff: 'easy',
+                        tag: 'Print',
+                        title: 'Multi-line Art',
+                        desc: "Using only print() statements, draw a simple house shape with ASCII art:\n    /\\\n   /  \\\n  /    \\\n |      |\n |  ()  |\n |______|",
+                        example: 'Expected output:\n    /\\\n   /  \\\n  /    \\\n |      |\n |  ()  |\n |______|',
+                        hint: "Each row is one print() call. Use spaces carefully. print('    /\\\\')",
+                        starter: "# Draw a house using print()\n# Be careful with backslashes!\nprint('    /\\\\')\n# continue..."
+                    },
+                ]
+            },
+            {
+                id: 2,
+                title: 'Variables & Data Types',
+                desc: 'Integers, floats, strings, booleans — understand Python\'s core data types.',
+                videoId: 'eWRfhZUzrAc',
+                videoTitle: 'Python Full Course — Variables & Data Types',
+                topics: ['int, float, str, bool', 'type() function', 'Type conversion', 'Multiple assignment', 'Variable naming rules', 'None type'],
+                note: '<strong>Watch from 30:00 to 1:00:00</strong> of the Bro Code Python tutorial. Focus on how Python handles types dynamically — this is very different from Java or C++!',
+                challenges: [{
+                        id: 201,
+                        diff: 'easy',
+                        tag: 'Variables',
+                        title: 'Personal Info Card',
+                        desc: 'Create variables for: your name (str), age (int), height in cm (float), is_student (bool). Then print them in a formatted card using f-strings.',
+                        example: 'Output:\n===== My Info =====\nName:       Alice\nAge:        20\nHeight:     165.5 cm\nStudent:    True',
+                        hint: 'name = "Alice"\nage = 20\nheight = 165.5\nis_student = True\nThen use f-strings with padding: f"{name:<12}" left-aligns in 12 chars.',
+                        starter: '# Create your personal info variables\nname = ""\nage = 0\nheight = 0.0\nis_student = True\n\n# Print formatted card\nprint("===== My Info =====")\n# your prints here...'
+                    },
+                    {
+                        id: 202,
+                        diff: 'easy',
+                        tag: 'Types',
+                        title: 'Type Detective',
+                        desc: 'Without running code, predict the type of each expression. Then write code to verify using type():\n1. 5 / 2\n2. 5 // 2\n3. "5" + "2"\n4. True + True\n5. None',
+                        example: '5 / 2 → 2.5 → type: float\n5 // 2 → 2 → type: int\n"5"+"2" → "52" → type: str\nTrue+True → 2 → type: int\nNone → type: NoneType',
+                        hint: 'In Python, / always returns float. // is integer division. Strings add by concatenation. True == 1 in Python!',
+                        starter: '# Predict then verify!\nprint(5 / 2, type(5 / 2))\nprint(5 // 2, type(5 // 2))\n# add the other 3 expressions...'
+                    },
+                    {
+                        id: 203,
+                        diff: 'medium',
+                        tag: 'Conversion',
+                        title: 'Temperature Converter',
+                        desc: 'Ask the user for a temperature in Celsius (use input()), convert it to Fahrenheit and Kelvin, and print all three. Formula: F = C×9/5 + 32, K = C + 273.15',
+                        example: 'Enter temperature in Celsius: 100\n100.0°C = 212.0°F = 373.15K',
+                        hint: "celsius = float(input('Enter temperature in Celsius: '))\nRemember input() always returns a string, so convert with float()!",
+                        starter: "# Temperature Converter\ncelsius = float(input('Enter temperature in Celsius: '))\n# Calculate fahrenheit and kelvin\nfahrenheit = 0  # fix this\nkelvin = 0  # fix this\nprint(f'{celsius}°C = {fahrenheit}°F = {kelvin}K')"
+                    },
+                ]
+            },
+            {
+                id: 3,
+                title: 'User Input & String Methods',
+                desc: 'Get input from users and manipulate strings with powerful built-in methods.',
+                videoId: 'eWRfhZUzrAc',
+                videoTitle: 'Python Full Course — Strings & Input',
+                topics: ['input() function', '.upper() .lower()', '.strip() .replace()', '.split() .join()', '.find() .count()', 'String slicing', 'len()'],
+                note: '<strong>Watch from 1:00:00 to 1:45:00.</strong> The string slicing section is especially important — s[start:end:step] is used everywhere in Python!',
+                challenges: [{
+                        id: 301,
+                        diff: 'easy',
+                        tag: 'Strings',
+                        title: 'String Inspector',
+                        desc: "Take a string input from the user and print:\n1. Its length\n2. Uppercase version\n3. Reversed version (using slicing!)\n4. How many vowels it contains\n5. Is it a palindrome?",
+                        example: 'Enter a string: racecar\nLength: 7\nUppercase: RACECAR\nReversed: racecar\nVowels: 3\nPalindrome: True',
+                        hint: "Reverse with s[::-1]. Count vowels: sum(1 for c in s if c.lower() in 'aeiou'). Palindrome: s == s[::-1]",
+                        starter: "s = input('Enter a string: ')\n# 1. Length\nprint(f'Length: {len(s)}')\n# 2. Uppercase\n# 3. Reversed (use slicing s[::-1])\n# 4. Count vowels\n# 5. Check palindrome"
+                    },
+                    {
+                        id: 302,
+                        diff: 'medium',
+                        tag: 'Strings',
+                        title: 'Word Counter',
+                        desc: 'Write a program that takes a sentence and prints:\n1. Word count\n2. Character count (no spaces)\n3. Most common word\n4. Sentence reversed word by word',
+                        example: 'Input: the quick brown fox\nWords: 4\nChars (no spaces): 16\nMost common: the\nReversed: fox brown quick the',
+                        hint: "words = sentence.split()\nchar_count = len(sentence.replace(' ',''))\nFor most common: max(set(words), key=words.count)\nReversed words: ' '.join(reversed(words))",
+                        starter: "sentence = input('Enter a sentence: ')\nwords = sentence.split()\nprint(f'Words: {len(words)}')\n# add character count, most common, reversed"
+                    },
+                    {
+                        id: 303,
+                        diff: 'medium',
+                        tag: 'Strings',
+                        title: 'Caesar Cipher',
+                        desc: 'Implement a Caesar cipher! Shift each letter in the input by a given amount. Uppercase stays uppercase, lowercase stays lowercase. Non-letters stay unchanged.',
+                        example: 'Text: Hello World  Shift: 3\nOutput: Khoor Zruog\n\nText: Python  Shift: 13 (ROT13)\nOutput: Clguba',
+                        hint: "For each char: if uppercase, ord('A') to ord('Z') range. new_char = chr((ord(c) - ord('A') + shift) % 26 + ord('A'))",
+                        starter: "text = input('Enter text: ')\nshift = int(input('Enter shift: '))\nresult = ''\nfor c in text:\n    if c.isalpha():\n        base = ord('A') if c.isupper() else ord('a')\n        result += chr((ord(c) - base + shift) % 26 + base)\n    else:\n        result += c\nprint(f'Output: {result}')"
+                    },
+                ]
+            },
+            {
+                id: 4,
+                title: 'If / Elif / Else',
+                desc: 'Make decisions in your code with conditional statements.',
+                videoId: 'eWRfhZUzrAc',
+                videoTitle: 'Python Full Course — Conditionals',
+                topics: ['if/elif/else', 'Comparison operators', 'Logical: and, or, not', 'Ternary operator', 'Nested conditions', 'Truthy/Falsy values'],
+                note: '<strong>Watch from 1:45:00 to 2:30:00.</strong> Pay close attention to the ternary operator — x = "yes" if condition else "no" — it\'s very Pythonic!',
+                challenges: [{
+                        id: 401,
+                        diff: 'easy',
+                        tag: 'Conditionals',
+                        title: 'Grade Calculator',
+                        desc: 'Take a score (0-100) as input and print the letter grade:\n90-100: A\n80-89: B\n70-79: C\n60-69: D\nbelow 60: F\nAlso print "Pass" or "Fail".',
+                        example: 'Enter score: 85\nGrade: B\nResult: Pass',
+                        hint: "Use elif for multiple conditions. 'Pass' if score >= 60 else 'Fail' is the ternary approach.",
+                        starter: "score = int(input('Enter score: '))\n# Determine grade\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\n# add C, D, F\n# print grade and pass/fail"
+                    },
+                    {
+                        id: 402,
+                        diff: 'medium',
+                        tag: 'Conditionals',
+                        title: 'Triangle Classifier',
+                        desc: 'Given three sides a, b, c — determine:\n1. Is it a valid triangle? (sum of any 2 sides > 3rd)\n2. If valid: Equilateral, Isosceles, or Scalene?\n3. Is it a right triangle? (check Pythagorean theorem)',
+                        example: 'Sides: 3 4 5\nValid triangle: Yes\nType: Scalene\nRight triangle: Yes\n\nSides: 5 5 5\nValid: Yes\nType: Equilateral\nRight: No',
+                        hint: "Valid if: a+b>c and b+c>a and a+c>b. Right triangle: sort sides, check if sorted[2]**2 == sorted[0]**2 + sorted[1]**2 (use round() for floats!)",
+                        starter: "a,b,c = map(float, input('Enter 3 sides: ').split())\n# Check valid triangle\n# Check type (equilateral/isosceles/scalene)\n# Check right triangle"
+                    },
+                    {
+                        id: 403,
+                        diff: 'hard',
+                        tag: 'Conditionals',
+                        title: 'FizzBuzz Ultimate',
+                        desc: 'Classic FizzBuzz but harder: print 1 to 100, but:\n• Multiple of 3: Fizz\n• Multiple of 5: Buzz\n• Multiple of 7: Jazz\n• Multiple of 3&5: FizzBuzz\n• Multiple of 3&7: FizzJazz\n• Multiple of 5&7: BuzzJazz\n• Multiple of 3&5&7: FizzBuzzJazz\nCount how many times each word appears.',
+                        example: '1, 2, Fizz, 4, Buzz, Fizz, Jazz, 8, Fizz, Buzz...\n105 = 3×5×7 → FizzBuzzJazz\n\nFizz: ? times\nBuzz: ? times\nJazz: ? times',
+                        hint: "Build the result string by concatenating: if n%3==0: result+='Fizz'. Count with a dictionary: counts = {'Fizz':0,'Buzz':0,'Jazz':0}",
+                        starter: "counts = {'Fizz':0,'Buzz':0,'Jazz':0}\nfor n in range(1,101):\n    result = ''\n    if n % 3 == 0: result += 'Fizz'\n    if n % 5 == 0: result += 'Buzz'\n    if n % 7 == 0: result += 'Jazz'\n    print(result if result else n)\n    # count occurrences\n# print counts"
+                    },
+                ]
+            },
+            {
+                id: 5,
+                title: 'Loops — for & while',
+                desc: 'Repeat code efficiently with Python\'s powerful loop constructs.',
+                videoId: 'eWRfhZUzrAc',
+                videoTitle: 'Python Full Course — Loops',
+                topics: ['for loop', 'while loop', 'range()', 'break & continue', 'enumerate()', 'zip()', 'Nested loops', 'List comprehension preview'],
+                note: '<strong>Watch from 2:30:00 to 3:20:00.</strong> The enumerate() and zip() functions are often overlooked by beginners but are incredibly powerful in real Python code!',
+                challenges: [{
+                        id: 501,
+                        diff: 'easy',
+                        tag: 'Loops',
+                        title: 'Multiplication Table',
+                        desc: 'Print a formatted multiplication table for numbers 1-10. Each cell should be right-aligned in 4 characters.',
+                        example: '    1    2    3  ...   10\n1    1    2    3  ...   10\n2    2    4    6  ...   20\n...\n10  10   20   30  ...  100',
+                        hint: "Use nested for loops. f'{n:4}' right-aligns in 4 spaces. Print header row first with range(1,11).",
+                        starter: "# Print header\nprint('    ', end='')\nfor i in range(1, 11):\n    print(f'{i:4}', end='')\nprint()\n# Print rows\nfor i in range(1, 11):\n    print(f'{i:4}', end='')\n    for j in range(1, 11):\n        print(f'{i*j:4}', end='')\n    print()"
+                    },
+                    {
+                        id: 502,
+                        diff: 'medium',
+                        tag: 'Loops',
+                        title: 'Number Patterns',
+                        desc: 'Print these patterns for n=5:\n\nPattern 1 (triangle):\n*\n**\n***\n****\n*****\n\nPattern 2 (diamond):\n    *\n   ***\n  *****\n   ***\n    *\n\nPattern 3 (number pyramid):\n1\n1 2\n1 2 3\n1 2 3 4\n1 2 3 4 5',
+                        example: 'All three patterns for n=5',
+                        hint: "Pattern 1: for i in range(1,n+1): print('*'*i)\nDiamond top half: for i in range(1,n+1,2): print(' '*((n-i)//2) + '*'*i)\nPyramid: for i in range(1,n+1): print(' '.join(str(x) for x in range(1,i+1)))",
+                        starter: "n = 5\nprint('=== Pattern 1: Triangle ===')\nfor i in range(1, n+1):\n    print('*' * i)\n\nprint('\\n=== Pattern 2: Diamond ===')\n# your code\n\nprint('\\n=== Pattern 3: Number Pyramid ===')\n# your code"
+                    },
+                    {
+                        id: 503,
+                        diff: 'hard',
+                        tag: 'Loops',
+                        title: 'Collatz Conjecture',
+                        desc: 'The Collatz sequence: start with any positive integer n.\n• If n is even: n = n / 2\n• If n is odd: n = n × 3 + 1\nRepeat until n == 1.\n\nWrite a program that:\n1. Finds the Collatz sequence for a given n\n2. Finds which number under 1000 has the LONGEST Collatz sequence',
+                        example: 'Input: 6\nSequence: 6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1\nSteps: 8\n\nLongest under 1000: 871 (178 steps)',
+                        hint: "def collatz_length(n): count=0; while n!=1: n=n//2 if n%2==0 else 3*n+1; count+=1; return count\nThen: max(range(1,1000), key=collatz_length)",
+                        starter: "def collatz_sequence(n):\n    seq = [n]\n    while n != 1:\n        if n % 2 == 0:\n            n = n // 2\n        else:\n            n = 3 * n + 1\n        seq.append(n)\n    return seq\n\nnum = int(input('Enter a number: '))\nseq = collatz_sequence(num)\nprint(f'Sequence: {\" → \".join(map(str, seq))}')\nprint(f'Steps: {len(seq)-1}')\n\n# Now find longest under 1000\nprint('\\nFinding longest Collatz sequence under 1000...')\n# your code here"
+                    },
+                ]
+            },
+            {
+                id: 6,
+                title: 'Functions',
+                desc: 'Write reusable, clean code with Python functions and understand scope.',
+                videoId: 'eWRfhZUzrAc',
+                videoTitle: 'Python Full Course — Functions',
+                topics: ['def keyword', 'Parameters & arguments', 'Default parameters', '*args & **kwargs', 'Return values', 'Scope (local/global)', 'Lambda functions', 'Docstrings'],
+                note: '<strong>Watch from 3:20:00 to 4:10:00.</strong> Understanding *args and **kwargs unlocks a lot of powerful Python patterns. Don\'t skip this section!',
+                challenges: [{
+                        id: 601,
+                        diff: 'easy',
+                        tag: 'Functions',
+                        title: 'Calculator Functions',
+                        desc: 'Write 5 functions: add, subtract, multiply, divide, power.\nEach takes two numbers. divide() must handle division by zero gracefully.\nThen write a main() function that shows a menu and calls the right function.',
+                        example: '1. Add\n2. Subtract\n3. Multiply\n4. Divide\n5. Power\nChoice: 4\nEnter a: 10\nEnter b: 0\nError: Cannot divide by zero!',
+                        hint: "def divide(a, b): return a/b if b != 0 else 'Error: Cannot divide by zero!'\nFor the menu, use a dictionary: ops = {1: add, 2: subtract, ...} then ops[choice](a, b)",
+                        starter: "def add(a, b):\n    return a + b\n\ndef subtract(a, b):\n    return a - b\n\ndef multiply(a, b):\n    return a * b\n\ndef divide(a, b):\n    # handle division by zero!\n    pass\n\ndef power(a, b):\n    return a ** b\n\ndef main():\n    print('1. Add  2. Subtract  3. Multiply  4. Divide  5. Power')\n    choice = int(input('Choice: '))\n    a = float(input('Enter a: '))\n    b = float(input('Enter b: '))\n    # call the right function\n\nmain()"
+                    },
+                    {
+                        id: 602,
+                        diff: 'medium',
+                        tag: 'Functions',
+                        title: 'Recursive Fibonacci',
+                        desc: 'Write TWO versions of Fibonacci:\n1. Recursive (simple but slow)\n2. Iterative (fast)\n3. With memoization (use a dictionary cache)\n\nTest all three for fib(35) and compare speed using time module.',
+                        example: 'fib(10) = 55\nfib(35) = 9227465\n\nRecursive time: ~5 seconds\nIterative time: ~0.00001 seconds\nMemoized time: ~0.00001 seconds',
+                        hint: "import time\nFor memoization: cache = {}\ndef fib_memo(n, cache={}): if n in cache: return cache[n]; ...; cache[n] = result; return result",
+                        starter: "import time\n\ndef fib_recursive(n):\n    \"\"\"Simple recursive - O(2^n)\"\"\"\n    if n <= 1:\n        return n\n    return fib_recursive(n-1) + fib_recursive(n-2)\n\ndef fib_iterative(n):\n    \"\"\"Iterative - O(n)\"\"\"\n    if n <= 1: return n\n    a, b = 0, 1\n    for _ in range(2, n+1):\n        a, b = b, a + b\n    return b\n\ndef fib_memo(n, cache={}):\n    \"\"\"Memoized - O(n) time, O(n) space\"\"\"\n    # implement this!\n    pass\n\n# Test and time\nfor name, fn in [('Recursive', fib_recursive), ('Iterative', fib_iterative), ('Memoized', fib_memo)]:\n    start = time.time()\n    result = fn(30)\n    elapsed = time.time() - start\n    print(f'{name}: fib(30) = {result} | Time: {elapsed:.6f}s')"
+                    },
+                    {
+                        id: 603,
+                        diff: 'hard',
+                        tag: 'Functions',
+                        title: 'Decorator: Timer & Logger',
+                        desc: 'Write two decorators:\n1. @timer — measures how long a function takes to run\n2. @logger — prints function name, arguments, and return value\n\nThen apply BOTH to a slow function and see them in action.',
+                        example: '@timer\n@logger\ndef slow_sum(n):\n    return sum(range(n))\n\nslow_sum(1000000)\n\nOutput:\n[LOG] Calling slow_sum(1000000)\n[LOG] slow_sum returned 499999500000\n[TIMER] slow_sum took 0.0234s',
+                        hint: "def timer(func):\n    def wrapper(*args, **kwargs):\n        import time; start=time.time()\n        result = func(*args, **kwargs)\n        print(f'[TIMER] {func.__name__} took {time.time()-start:.4f}s')\n        return result\n    return wrapper",
+                        starter: "import time\nfrom functools import wraps\n\ndef timer(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        elapsed = time.time() - start\n        print(f'[TIMER] {func.__name__} took {elapsed:.4f}s')\n        return result\n    return wrapper\n\ndef logger(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        # print: [LOG] Calling funcname(args)\n        result = func(*args, **kwargs)\n        # print: [LOG] funcname returned result\n        return result\n    return wrapper\n\n@timer\n@logger\ndef slow_sum(n):\n    return sum(range(n))\n\nslow_sum(1_000_000)"
+                    },
+                ]
+            },
+        ];
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // STATE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        const ST = {
+            currentLesson: parseInt(localStorage.getItem('pl_lesson') || '0'),
+            currentChIdx: parseInt(localStorage.getItem('pl_chIdx') || '0'),
+            watched: JSON.parse(localStorage.getItem('pl_watched') || '[]'),
+            solved: JSON.parse(localStorage.getItem('pl_solved') || '[]'),
+            streak: parseInt(localStorage.getItem('pl_streak') || '0'),
+            best: parseInt(localStorage.getItem('pl_best') || '0'),
+            day: parseInt(localStorage.getItem('pl_day') || '1'),
+        };
+
+        function save() {
+            localStorage.setItem('pl_lesson', ST.currentLesson);
+            localStorage.setItem('pl_chIdx', ST.currentChIdx);
+            localStorage.setItem('pl_watched', JSON.stringify(ST.watched));
+            localStorage.setItem('pl_solved', JSON.stringify(ST.solved));
+            localStorage.setItem('pl_streak', ST.streak);
+            localStorage.setItem('pl_best', ST.best);
+            localStorage.setItem('pl_day', ST.day);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // SCREEN NAVIGATION
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        const SCREENS = ['watch', 'challenge', 'progress'];
+        let currentScreen = 'watch';
+
+        function goScreen(name) {
+            SCREENS.forEach(s => {
+                document.getElementById('screen' + cap(s)).classList.remove('active');
+                const stepEl = document.getElementById('step' + cap(s));
+                if (stepEl) stepEl.classList.remove('active');
+            });
+            document.getElementById('screen' + cap(name)).classList.add('active');
+            const stepEl = document.getElementById('step' + cap(name));
+            if (stepEl) stepEl.classList.add('active');
+            currentScreen = name;
+            if (name === 'progress') renderProgress();
+        }
+
+        function cap(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1)
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // LESSON / VIDEO SCREEN
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function renderLessonList() {
+            const el = document.getElementById('lessonList');
+            el.innerHTML = LESSONS.map((l, i) => {
+                const watched = ST.watched.includes(l.id);
+                const allSolved = l.challenges.every(c => ST.solved.includes(c.id));
+                const active = i === ST.currentLesson;
+                return `<div class="lesson-item ${active?'active-lesson':''} ${allSolved?'completed':''}"
+      onclick="selectLesson(${i})">
+      <div class="li-num">Lesson ${i+1}</div>
+      <div class="li-title">${l.title}</div>
+      <div class="li-status ${watched?'done':''}">${allSolved?'✓ Complete':watched?'▶ Watched — solve challenges':'▷ Not watched'}</div>
+    </div>`;
+            }).join('');
+        }
+
+        function selectLesson(idx) {
+            ST.currentLesson = idx;
+            ST.currentChIdx = 0;
+            save();
+            renderLessonCard();
+            renderLessonList();
+        }
+
+        let videoLoaded = false;
+
+        function renderLessonCard() {
+            const l = LESSONS[ST.currentLesson];
+            videoLoaded = false;
+
+            document.getElementById('lessonNum').textContent = `Lesson ${ST.currentLesson+1} of ${LESSONS.length}`;
+            document.getElementById('lessonTitle').textContent = l.title;
+            document.getElementById('lessonDesc').textContent = l.desc;
+            document.getElementById('lessonNote').innerHTML = l.note;
+            document.getElementById('videoLabel').textContent = l.videoTitle + ' — Click to Watch';
+            document.getElementById('statLesson').textContent = `${ST.currentLesson+1}/${LESSONS.length}`;
+
+            document.getElementById('topicsGrid').innerHTML = l.topics.map(t =>
+                `<div class="topic-chip"><div class="topic-dot"></div>${t}</div>`).join('');
+
+            // Reset video frame
+            const frame = document.getElementById('videoFrame');
+            const placeholder = document.getElementById('videoPlaceholder');
+            placeholder.style.display = 'flex';
+            const existingIframe = frame.querySelector('iframe');
+            if (existingIframe) existingIframe.remove();
+        }
+
+        function loadVideo() {
+            const l = LESSONS[ST.currentLesson];
+            const frame = document.getElementById('videoFrame');
+            document.getElementById('videoPlaceholder').style.display = 'none';
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${l.videoId}?autoplay=1&rel=0&start=0`;
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            frame.appendChild(iframe);
+            videoLoaded = true;
+        }
+
+        function markWatched() {
+            const l = LESSONS[ST.currentLesson];
+            if (!ST.watched.includes(l.id)) ST.watched.push(l.id);
+            const stepEl = document.getElementById('stepWatch');
+            stepEl.classList.add('done');
+            save();
+            renderLessonList();
+            // go to challenges
+            loadChallengeScreen();
+            goScreen('challenge');
+            showToast(`🎬 Great! Now solve the ${l.challenges.length} challenges for "${l.title}"`);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // CHALLENGE SCREEN
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function loadChallengeScreen() {
+            const l = LESSONS[ST.currentLesson];
+            const challenges = l.challenges;
+            const idx = Math.min(ST.currentChIdx, challenges.length - 1);
+            ST.currentChIdx = idx;
+
+            // header
+            const doneCh = challenges.filter(c => ST.solved.includes(c.id)).length;
+            document.getElementById('chProgFill').style.width = (doneCh / challenges.length * 100) + '%';
+            document.getElementById('chProgTxt').textContent = `${doneCh} / ${challenges.length}`;
+            document.getElementById('chLessonLabel').textContent = `Lesson ${ST.currentLesson+1}: ${l.title}`;
+
+            renderChallenge(challenges[idx]);
+        }
+
+        function renderChallenge(ch) {
+            const l = LESSONS[ST.currentLesson];
+            const idx = l.challenges.indexOf(ch);
+            const total = l.challenges.length;
+
+            const diffCls = {
+                easy: 'b-easy',
+                medium: 'b-medium',
+                hard: 'b-hard'
+            } [ch.diff] || 'b-medium';
+            document.getElementById('chBadges').innerHTML =
+                `<span class="badge ${diffCls}">${ch.diff}</span><span class="badge b-tag">${ch.tag}</span>`;
+            document.getElementById('chTitle').textContent = ch.title;
+            document.getElementById('chDesc').textContent = ch.desc;
+            document.getElementById('chExCode').textContent = ch.example;
+            document.getElementById('chNumLabel').textContent = `${idx+1} of ${total}`;
+            document.getElementById('chNavTitle').textContent = ch.title;
+            document.getElementById('chNavSub').textContent = ST.solved.includes(ch.id) ?
+                '✓ Already solved! Try the next one.' : 'Write your solution in Python and click Run to test.';
+
+            // hint box
+            document.getElementById('hintBox').textContent = ch.hint;
+            document.getElementById('hintBox').classList.remove('show');
+
+            // code area
+            document.getElementById('codeArea').value = ch.starter || '# Your solution here\n';
+            updateLines();
+            setOut([{
+                c: 'o-info',
+                t: 'Write your solution and click ▶ Run to test it.'
+            }]);
+            document.getElementById('outStatus').textContent = 'Ready';
+            document.getElementById('outStatus').className = 'out-status s-idle';
+            document.getElementById('edFile').textContent = `solution_${ch.id}.py`;
+        }
+
+        function toggleHint() {
+            document.getElementById('hintBox').classList.toggle('show');
+        }
+
+        function nextChallenge() {
+            const l = LESSONS[ST.currentLesson];
+            ST.currentChIdx = (ST.currentChIdx + 1) % l.challenges.length;
+            save();
+            renderChallenge(l.challenges[ST.currentChIdx]);
+        }
+
+        function prevChallenge() {
+            const l = LESSONS[ST.currentLesson];
+            ST.currentChIdx = (ST.currentChIdx - 1 + l.challenges.length) % l.challenges.length;
+            save();
+            renderChallenge(l.challenges[ST.currentChIdx]);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // EDITOR
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function updateLines() {
+            const n = document.getElementById('codeArea').value.split('\n').length;
+            document.getElementById('lineNums').textContent = Array.from({
+                length: n
+            }, (_, i) => i + 1).join('\n');
+        }
+
+        function handleTab(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const ta = document.getElementById('codeArea');
+                const s = ta.selectionStart;
+                ta.value = ta.value.slice(0, s) + '    ' + ta.value.slice(ta.selectionEnd);
+                ta.selectionStart = ta.selectionEnd = s + 4;
+                updateLines();
+            }
+        }
+
+        function resetCode() {
+            const l = LESSONS[ST.currentLesson];
+            const ch = l.challenges[ST.currentChIdx];
+            document.getElementById('codeArea').value = ch.starter || '# Your solution here\n';
+            updateLines();
+        }
+
+        function setOut(items) {
+            document.getElementById('outBody').innerHTML = items.map(({
+                    c,
+                    t
+                }) =>
+                c === 'o-ai' ?
+                `<span class="${c}">${t}</span>` :
+                `<div class="${c}">${t}</div>`
+            ).join('');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // AI ACTIONS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        async function runCode() {
+            const code = document.getElementById('codeArea').value.trim();
+            if (code.length < 5) {
+                showToast('Write some code first!');
+                return;
+            }
+            const l = LESSONS[ST.currentLesson];
+            const ch = l.challenges[ST.currentChIdx];
+
+            setOut([{
+                c: 'o-info',
+                t: '<span class="ld"><span></span><span></span><span></span></span> Running against test cases...'
+            }]);
+            document.getElementById('outStatus').textContent = 'Running';
+            document.getElementById('outStatus').className = 'out-status s-run';
+
+            try {
+                const res = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 900,
+                        system: `You are a Python code evaluator for beginners. Evaluate the student's Python code for the given challenge.
+Reply ONLY with this exact JSON structure (no markdown, no backticks):
+{"tests":[{"name":"Test 1","passed":true,"expected":"...","got":"..."},{"name":"Test 2","passed":false,"expected":"...","got":"..."},{"name":"Test 3","passed":true,"expected":"...","got":"..."}],"feedback":"brief encouraging feedback for a beginner in 1-2 sentences","score":75,"tip":"one specific Python tip"}`,
+                        messages: [{
+                            role: 'user',
+                            content: `Lesson: ${l.title}\nChallenge: ${ch.title}\nDescription: ${ch.desc}\n\nStudent code:\n${code}`
+                        }]
+                    })
+                });
+                const data = await res.json();
+                const txt = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+                let p;
+                try {
+                    p = JSON.parse(txt.replace(/```json|```/g, '').trim());
+                } catch (e) {
+                    p = {
+                        tests: [{
+                            name: 'Test',
+                            passed: false,
+                            got: 'Could not parse'
+                        }],
+                        feedback: 'Check your syntax.',
+                        score: 0,
+                        tip: ''
+                    };
+                }
+
+                const all = p.tests.every(t => t.passed);
+                const items = p.tests.map(t => ({
+                    c: t.passed ? 'o-pass' : 'o-fail',
+                    t: `${t.passed?'✓':'✗'} ${t.name} → expected: <b>${t.expected||'—'}</b> | got: <b>${t.got||'—'}</b>`
+                }));
+                items.push({
+                    c: 'o-info',
+                    t: `Score: <b>${p.score}/100</b>`
+                });
+                items.push({
+                    c: 'o-ai',
+                    t: `💬 ${p.feedback}${p.tip?'<br>💡 Tip: '+p.tip:''}`
+                });
+                setOut(items);
+                document.getElementById('outStatus').textContent = all ? 'All Passed ✓' : 'Some Failed';
+                document.getElementById('outStatus').className = `out-status ${all?'s-pass':'s-fail'}`;
+            } catch (e) {
+                setOut([{
+                        c: 'o-info',
+                        t: '✓ Code accepted (offline mode — API unavailable)'
+                    },
+                    {
+                        c: 'o-ai',
+                        t: '💬 Connect to API for real test evaluation. Click Submit when ready!'
+                    }
+                ]);
+                document.getElementById('outStatus').textContent = 'Offline';
+                document.getElementById('outStatus').className = 'out-status s-idle';
+            }
+        }
+
+        async function getHint() {
+            const code = document.getElementById('codeArea').value.trim();
+            const l = LESSONS[ST.currentLesson];
+            const ch = l.challenges[ST.currentChIdx];
+            setOut([{
+                c: 'o-info',
+                t: '<span class="ld"><span></span><span></span><span></span></span> Getting personalized hint...'
+            }]);
+
+            try {
+                const res = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 350,
+                        system: 'You are a friendly Python tutor for beginners. Give a warm, encouraging 2-3 sentence hint. Be specific to their code. Guide without giving the full answer. Use simple language.',
+                        messages: [{
+                            role: 'user',
+                            content: `Challenge: ${ch.title}\n${ch.desc}\n\nTheir code:\n${code||'(empty)'}\n\nHint needed.`
+                        }]
+                    })
+                });
+                const data = await res.json();
+                const hint = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('') || ch.hint;
+                setOut([{
+                    c: 'o-ai',
+                    t: `🤖 <b>AI Hint:</b> ${hint}`
+                }]);
+            } catch (e) {
+                setOut([{
+                    c: 'o-ai',
+                    t: `💡 <b>Hint:</b> ${ch.hint}`
+                }]);
+            }
+        }
+
+        async function submitCode() {
+            const code = document.getElementById('codeArea').value.trim();
+            if (code.length < 10) {
+                showToast('Write a solution first!');
+                return;
+            }
+            const l = LESSONS[ST.currentLesson];
+            const ch = l.challenges[ST.currentChIdx];
+
+            if (!ST.solved.includes(ch.id)) {
+                ST.solved.push(ch.id);
+                ST.streak++;
+                if (ST.streak > ST.best) ST.best = ST.streak;
+                ST.day = Math.min(ST.day + 1, 365);
+                save();
+                updateTopbar();
+                loadChallengeScreen();
+                // check if lesson complete
+                const allDone = l.challenges.every(c => ST.solved.includes(c.id));
+                if (allDone) {
+                    showToast(`🎉 Lesson ${ST.currentLesson+1} complete! All challenges solved!`);
+                    setOut([{
+                            c: 'o-pass',
+                            t: `✓ "${ch.title}" solved!`
+                        },
+                        {
+                            c: 'o-pass',
+                            t: `✓ Lesson ${ST.currentLesson+1} "${l.title}" — ALL DONE! 🎉`
+                        },
+                        {
+                            c: 'o-ai',
+                            t: `Amazing work! You completed all challenges for this lesson. Move to Lesson ${ST.currentLesson+2} when ready!`
+                        }
+                    ]);
+                } else {
+                    showToast(`✓ Solved! ${l.challenges.filter(c=>ST.solved.includes(c.id)).length}/${l.challenges.length} this lesson`);
+                    setOut([{
+                            c: 'o-pass',
+                            t: `✓ "${ch.title}" submitted and solved!`
+                        },
+                        {
+                            c: 'o-pass',
+                            t: `🔥 Streak: ${ST.streak} days`
+                        },
+                        {
+                            c: 'o-ai',
+                            t: `Well done! Keep going — ${l.challenges.filter(c=>!ST.solved.includes(c.id)).length} more challenge(s) in this lesson.`
+                        }
+                    ]);
+                }
+                document.getElementById('outStatus').textContent = 'Solved ✓';
+                document.getElementById('outStatus').className = 'out-status s-pass';
+                document.getElementById('chNavSub').textContent = '✓ Already solved! Try the next one.';
+                renderLessonList();
+            } else {
+                showToast('Already solved! Try the next challenge.');
+            }
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // PROGRESS SCREEN
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function renderProgress() {
+            // heatmap
+            const hm = document.getElementById('heatmap');
+            hm.innerHTML = '';
+            const totalSolved = ST.solved.length;
+            for (let w = 0; w < 52; w++) {
+                const wk = document.createElement('div');
+                wk.className = 'hm-week';
+                for (let d = 0; d < 7; d++) {
+                    const dn = w * 7 + d + 1;
+                    if (dn > 365) {
+                        wk.appendChild(document.createElement('div'));
+                        continue;
+                    }
+                    const cell = document.createElement('div');
+                    cell.className = 'hm-cell' + (dn === ST.day ? ' today' : '') + (dn <= totalSolved ? ' done' : '');
+                    cell.title = `Day ${dn}`;
+                    wk.appendChild(cell);
+                }
+                hm.appendChild(wk);
+            }
+            const pct = ((totalSolved / 365) * 100).toFixed(1);
+            document.getElementById('hmPct').textContent = `${totalSolved} / 365`;
+            document.getElementById('hmFill').style.width = pct + '%';
+
+            // lesson status
+            const pl = document.getElementById('progressLessons');
+            pl.innerHTML = LESSONS.map((l, i) => {
+                const watched = ST.watched.includes(l.id);
+                const done = l.challenges.filter(c => ST.solved.includes(c.id)).length;
+                const total = l.challenges.length;
+                const all = done === total;
+                return `<div class="lesson-item ${all?'completed':''}" onclick="selectLesson(${i});goScreen('watch')">
+      <div class="li-num">Lesson ${i+1}</div>
+      <div class="li-title">${l.title}</div>
+      <div class="li-status ${all?'done':''}">
+        ${watched?'▶ Watched':'○ Not watched'} · ${done}/${total} challenges
+      </div>
+    </div>`;
+            }).join('');
+        }
+
+        function updateTopbar() {
+            document.getElementById('statSolved').textContent = ST.solved.length;
+            document.getElementById('statStreak').textContent = ST.streak;
+            document.getElementById('statLesson').textContent = `${ST.currentLesson+1}/${LESSONS.length}`;
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3400);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // INIT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        updateTopbar();
+        renderLessonList();
+        renderLessonCard();
+    </script>
+</body>
+
+</html>
